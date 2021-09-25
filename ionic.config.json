@@ -1,0 +1,7 @@
+{
+  "name": "Semsterprojekt",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
