@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>newTour</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item>
+      <ion-label>Datum</ion-label>
+      <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="date" placeholder="Datum eingeben"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Uhrzeit Start</ion-label>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="startTime" placeholder="Startzeit eingeben"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Uhrzeit Ende</ion-label>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="endTime" placeholder="Endzeit eingeben"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Batteriestatus Start</ion-label>
+      <ion-input type="text" [value]="batteryStart" (change)="resetBatteryStart($any($event.target).value)" placeholder="Ladezustand in %"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

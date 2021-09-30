@@ -10,7 +10,15 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },  {
+    path: 'new-tour',
+    loadChildren: () => import('./new-tour/new-tour.module').then( m => m.NewTourPageModule)
   },
+  {
+    path: 'overview-tours',
+    loadChildren: () => import('./overview-tours/overview-tours.module').then( m => m.OverviewToursPageModule)
+  },
+
 ];
 
 @NgModule({

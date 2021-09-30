@@ -1,0 +1,15 @@
+Uhrzeit Start
+Uhrzeit Ende
+Dauer
+km
+durchschnittl. Geschwindigkeit
+Höhenmeter Uphill
+Höhenmeter Downhill
+Batterie Start
+Batterie Ende
+Datum
+--------------
+Touren-Übersicht
+--------------
+Neue Tour
+--------------
