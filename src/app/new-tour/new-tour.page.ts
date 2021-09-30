@@ -13,7 +13,7 @@ export class NewTourPage implements OnInit {
   endTime: string;
   duration: string;
   batteryStart: string;
-  betteryEnd: string;
+  batteryEnd: string;
 
   constructor() {
    }
@@ -26,13 +26,14 @@ export class NewTourPage implements OnInit {
     //this.duration = dateDifference;
   }
 
-  resetBatteryStart(inputValue: any): void {
+  setPercentageValue(inputValue: any, property: string): void {
     if(!isNaN(Number(inputValue))){
-      this.batteryStart = Number(inputValue) + ' %';
-      console.log('batteryStart: ', this.batteryStart);
+      this[property] = Number(inputValue) + ' %';
+      console.log(`${property}: `, this[property]);
     } else{
         console.log('InputValue is Not a Number');
-        this.batteryStart = '';
+        alert('InputValue is Not a Number');
+        this[property] = '';
     }
   }
 

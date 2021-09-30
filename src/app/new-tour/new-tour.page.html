@@ -20,7 +20,11 @@
     </ion-item>
     <ion-item>
       <ion-label>Batteriestatus Start</ion-label>
-      <ion-input type="text" [value]="batteryStart" (change)="resetBatteryStart($any($event.target).value)" placeholder="Ladezustand in %"></ion-input>
+      <ion-input type="text" [value]="batteryStart" (change)="setPercentageValue($any($event.target).value, 'batteryStart')" placeholder="Ladezustand in %"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Batteriestatus Ende</ion-label>
+      <ion-input type="text" [value]="batteryEnd" (change)="setPercentageValue($any($event.target).value, 'batteryEnd')" placeholder="Ladezustand in %"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>
