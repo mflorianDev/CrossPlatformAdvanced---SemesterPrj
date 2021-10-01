@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>newTour</ion-title>
+    <ion-title>Neue Tour</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,11 +12,11 @@
     </ion-item>
     <ion-item>
       <ion-label>Uhrzeit Start</ion-label>
-      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="startTime" placeholder="Startzeit eingeben"></ion-datetime>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="startTime" (ngModelChange)="calculateDuration()" placeholder="Startzeit eingeben"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Uhrzeit Ende</ion-label>
-      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="endTime" placeholder="Endzeit eingeben"></ion-datetime>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="endTime" (ngModelChange)="calculateDuration()" placeholder="Endzeit eingeben"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Batteriestatus Start</ion-label>

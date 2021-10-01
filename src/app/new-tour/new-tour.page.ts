@@ -11,21 +11,30 @@ export class NewTourPage implements OnInit {
   date: string = new Date().toISOString();
   startTime: string;
   endTime: string;
-  duration: string;
+  duration: number;
   batteryStart: string;
   batteryEnd: string;
 
   constructor() {
    }
 
+  /**
+   * calculate and set tour duration in milliseconds
+   */
   calculateDuration(): void {
-    const startDate: Date = new Date(this.startTime);
-    const endDate: Date = new Date(this.endTime);
-    const dateDifference: number = endDate.getTime() - startDate.getTime();
-    console.log(dateDifference);
-    //this.duration = dateDifference;
+    if(this.startTime && this.endTime){
+      const startDate: Date = new Date(this.startTime);
+      const endDate: Date = new Date(this.endTime);
+      this.duration = endDate.getTime() - startDate.getTime();
+    }
   }
 
+  /**
+   * pecentage symbol added to input value
+   *
+   * @param inputValue
+   * @param property
+   */
   setPercentageValue(inputValue: any, property: string): void {
     if(!isNaN(Number(inputValue))){
       this[property] = Number(inputValue) + ' %';

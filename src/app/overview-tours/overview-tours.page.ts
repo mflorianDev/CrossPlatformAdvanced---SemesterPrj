@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TOURS } from '../core/mock-tours';
+import { Tour } from '../core/tour';
 
 @Component({
   selector: 'app-overview-tours',
@@ -6,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./overview-tours.page.scss'],
 })
 export class OverviewToursPage implements OnInit {
+  tours = TOURS;
 
   constructor() { }
 

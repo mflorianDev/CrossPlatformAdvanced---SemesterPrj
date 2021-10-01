@@ -5,7 +5,7 @@ export const TOURS: Tour[] = [
     id: 1,
     name: 'Suedtiroler Trail',
     date: new Date(),
-    duration: 36000000,
+    duration: 3612000,
     distance: 12.4,
     altitudeUp: 420,
     altitudeDown: 210,

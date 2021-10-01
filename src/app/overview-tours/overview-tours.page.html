@@ -1,9 +1,20 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>overviewTours</ion-title>
+    <ion-title>Tourenübersicht</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let tour of tours">
+      <ion-label>
+        <h2>{{ tour.name }}</h2>
+        <h3>{{ tour.date }}</h3>
+        <p>Dauer: {{ tour.duration }}</p>
+        <p>Dauer: {{ tour.duration | date: 'HH:mm:ss'}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
 </ion-content>
