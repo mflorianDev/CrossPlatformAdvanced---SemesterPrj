@@ -14,6 +14,9 @@ export class NewTourPage implements OnInit {
   duration: number;
   batteryStart: string;
   batteryEnd: string;
+  batteryStartNumber: number;
+  batteryEndNumber: number;
+  batteryConsumption: number;
 
   constructor() {
    }
@@ -37,12 +40,24 @@ export class NewTourPage implements OnInit {
    */
   setPercentageValue(inputValue: any, property: string): void {
     if(!isNaN(Number(inputValue))){
+      this[property+'Number'] = Number(inputValue);
       this[property] = Number(inputValue) + ' %';
       console.log(`${property}: `, this[property]);
+      this.setBatteryConsumption();
     } else{
         console.log('InputValue is Not a Number');
         alert('InputValue is Not a Number');
         this[property] = '';
+    }
+  }
+
+  /**
+   * calculates and sets battery consumption
+   */
+  setBatteryConsumption(): void {
+    if(this.batteryStartNumber && this.batteryEndNumber){
+      this.batteryConsumption = this.batteryStartNumber - this.batteryEndNumber;
+      console.log('batteryConsumption: ', this.batteryConsumption);
     }
   }
 
