@@ -13,3 +13,8 @@ Touren-Übersicht
 --------------
 Neue Tour
 --------------
+Neue Tour in zwei Schritten eingeben:
+  Schritt1: bekannte Anfangsparameter
+    -> Zustand speichern (eigenes Interface?)
+  Schritt2: Fehlende Parameter nach Ende der Tour
+    -> Tour in die Tourenliste aufnehmen

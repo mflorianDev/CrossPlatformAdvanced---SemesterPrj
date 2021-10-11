@@ -2,6 +2,8 @@ import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { Geolocation } from '@capacitor/geolocation';
+
 @Component({
   selector: 'app-new-tour',
   templateUrl: './new-tour.page.html',
@@ -61,7 +63,16 @@ export class NewTourPage implements OnInit {
     }
   }
 
+
+  // Test Geolocation Plugin
+  printCurrentPosition = async () => {
+    const coordinates = await Geolocation.getCurrentPosition();
+    console.log('Current position:', coordinates);
+  };
+
+
   ngOnInit() {
+    this.printCurrentPosition();
   }
 
 }
