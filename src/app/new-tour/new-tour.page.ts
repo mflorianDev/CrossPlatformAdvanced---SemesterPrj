@@ -1,8 +1,7 @@
 import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { Geolocation } from '@capacitor/geolocation';
+import { Tour } from '../core/tour';
 
 @Component({
   selector: 'app-new-tour',
@@ -10,18 +9,24 @@ import { Geolocation } from '@capacitor/geolocation';
   styleUrls: ['./new-tour.page.scss'],
 })
 export class NewTourPage implements OnInit {
-  date: string = new Date().toISOString();
+  name: string;
+  date: string = new Date().toISOString().slice(0, 10);
   startTime: string;
   endTime: string;
   duration: number;
+  distance: number;
+  altitudeUp: number;
+  altitudeDown: number;
   batteryStart: string;
   batteryEnd: string;
   batteryStartNumber: number;
   batteryEndNumber: number;
-  batteryConsumption: number;
+  batteryConsumption: string;
+  batteryConsumptionNumber: number;
 
-  constructor() {
-   }
+  constructor() { }
+
+  ngOnInit() { }
 
   /**
    * calculate and set tour duration in milliseconds
@@ -41,15 +46,16 @@ export class NewTourPage implements OnInit {
    * @param property
    */
   setPercentageValue(inputValue: any, property: string): void {
-    if(!isNaN(Number(inputValue))){
+    if(!isNaN(Number(inputValue)) && inputValue.length > 0){
       this[property+'Number'] = Number(inputValue);
       this[property] = Number(inputValue) + ' %';
-      console.log(`${property}: `, this[property]);
-      this.setBatteryConsumption();
-    } else{
-        console.log('InputValue is Not a Number');
-        alert('InputValue is Not a Number');
-        this[property] = '';
+    } else if (!isNaN(Number(inputValue)) && inputValue.length === 0){
+      this[property+'Number'] = undefined;
+      this[property] = undefined;
+    } else {
+      this[property+'Number'] = undefined;
+      this[property] = undefined;
+      alert('InputValue is not a Number');
     }
   }
 
@@ -58,21 +64,24 @@ export class NewTourPage implements OnInit {
    */
   setBatteryConsumption(): void {
     if(this.batteryStartNumber && this.batteryEndNumber){
-      this.batteryConsumption = this.batteryStartNumber - this.batteryEndNumber;
-      console.log('batteryConsumption: ', this.batteryConsumption);
+      this.batteryConsumptionNumber = this.batteryStartNumber - this.batteryEndNumber;
+      this.batteryConsumption = this.batteryConsumptionNumber + ' %';
+    } else {
+      this.batteryConsumptionNumber = null;
+      this.batteryConsumption = null;
     }
   }
 
-
-  // Test Geolocation Plugin
-  printCurrentPosition = async () => {
-    const coordinates = await Geolocation.getCurrentPosition();
-    console.log('Current position:', coordinates);
-  };
-
-
-  ngOnInit() {
-    this.printCurrentPosition();
+  saveTour(){
+    const tour: Tour = {
+      name: this.name,
+      date: this.date,
+      duration: this.duration,
+      distance: this.distance,
+      altitudeUp: this.altitudeUp,
+      altitudeDown: this.altitudeDown,
+      batteryConsumption: this.batteryConsumptionNumber,
+    };
   }
 
 }

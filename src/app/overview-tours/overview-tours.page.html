@@ -12,9 +12,10 @@
         <h2>{{ tour.name }}</h2>
         <h3>{{ tour.date | date: 'd.MMM, y' }}</h3>
         <p>Dauer: {{ tour.duration | date: 'HH:mm:ss' : 'GMT' }}</p> <!--GMT necessary to prevent time offset-->
-        <p>Bergauf: {{ tour.altitudeUp }}</p>
-        <p>Bergauf: {{ tour.altitudeDown }}</p>
-        <p>Batterie: </p>
+        <p>Distanz: {{ tour.distance }} km</p>
+        <p>Bergauf: {{ tour.altitudeUp }} m</p>
+        <p>Bergauf: {{ tour.altitudeDown }} m</p>
+        <p>Batterie: {{ tour.batteryConsumption }} %</p>
       </ion-label>
     </ion-item>
   </ion-list>

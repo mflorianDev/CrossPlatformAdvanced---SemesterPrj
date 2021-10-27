@@ -7,6 +7,10 @@
 <ion-content [fullscreen]="true">
   <ion-list>
     <ion-item>
+      <ion-label>Tour</ion-label>
+      <ion-input type="text" [(ngModel)]="name" placeholder="Bezeichnung für Tour eingeben"></ion-input>
+    </ion-item>
+    <ion-item>
       <ion-label>Datum</ion-label>
       <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="date" placeholder="Datum eingeben"></ion-datetime>
     </ion-item>
@@ -19,12 +23,33 @@
       <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="endTime" (ngModelChange)="calculateDuration()" placeholder="Endzeit eingeben"></ion-datetime>
     </ion-item>
     <ion-item>
+      <ion-label>Distanz</ion-label>
+      <ion-input type="number" [(ngModel)]="distance" placeholder="Distanz in Kilometer"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bergauf</ion-label>
+      <ion-input type="number" [(ngModel)]="altitudeUp" placeholder="Höhenmeter bergauf in Metern"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bergab</ion-label>
+      <ion-input type="number" [(ngModel)]="altitudeDown" placeholder="Höhenmeter bergab in Metern"></ion-input>
+    </ion-item>
+    <ion-item>
       <ion-label>Batteriestatus Start</ion-label>
-      <ion-input type="text" [value]="batteryStart" (change)="setPercentageValue($any($event.target).value, 'batteryStart')" placeholder="Ladezustand in %"></ion-input>
+      <ion-input type="text" [value]="batteryStart"
+        (change)="setPercentageValue($any($event.target).value, 'batteryStart'); setBatteryConsumption()"
+        placeholder="Ladezustand in Prozent"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Batteriestatus Ende</ion-label>
-      <ion-input type="text" [value]="batteryEnd" (change)="setPercentageValue($any($event.target).value, 'batteryEnd')" placeholder="Ladezustand in %"></ion-input>
+      <ion-input type="text" [value]="batteryEnd"
+        (change)="setPercentageValue($any($event.target).value, 'batteryEnd'); setBatteryConsumption()"
+        placeholder="Ladezustand in Prozent"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Batterie Verbrauch</ion-label>
+      <p>{{ batteryConsumption }}</p>
     </ion-item>
   </ion-list>
+  <ion-button expand="full" (click)="saveTour()">Speichern</ion-button>
 </ion-content>

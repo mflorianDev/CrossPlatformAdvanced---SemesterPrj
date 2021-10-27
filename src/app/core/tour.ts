@@ -1,11 +1,10 @@
 export interface Tour {
-  id: number;
+  //id: number;
   name: string;
-  date: Date;
+  date: string;
   duration: number; //milliseconds
   distance: number; //km
   altitudeUp: number; //m
   altitudeDown: number; //m
-  batteryStart: number; //percentage
-  batteryEnd: number; //percentage
+  batteryConsumption: number; //percentage
 }
