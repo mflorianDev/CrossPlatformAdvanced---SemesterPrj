@@ -7,12 +7,22 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class MockToursService {
+  private tours: Tour[];
 
-  constructor() { }
+  constructor() {
+    this.getMockTours();
+  }
 
   getTours(): Observable<Tour[]>{
-    const tours = of(TOURS);
-    return tours;
+    return of(this.tours);
+  }
+
+  addTour(newTour: Tour): void{
+    this.tours.push(newTour);
+  }
+
+  private getMockTours(): void{
+    this.tours = TOURS;
   }
 
 }
