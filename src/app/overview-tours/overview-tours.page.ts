@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TOURS } from '../core/mock-tours';
+import { MockToursService } from '../core/services/mock-tours.service';
+import { Tour } from '../core/tour';
 
 @Component({
   selector: 'app-overview-tours',
@@ -7,11 +9,17 @@ import { TOURS } from '../core/mock-tours';
   styleUrls: ['./overview-tours.page.scss'],
 })
 export class OverviewToursPage implements OnInit {
-  tours = TOURS;
+  tours: Tour[] = [];
 
-  constructor() { }
+  constructor(private mockToursService: MockToursService) { }
 
   ngOnInit() {
+    this.getTours();
+  }
+
+  getTours(): void{
+    this.mockToursService.getTours()
+      .subscribe(tours => this.tours = tours);
   }
 
 }
