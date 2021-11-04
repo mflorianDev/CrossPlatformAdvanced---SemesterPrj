@@ -1,6 +1,7 @@
 import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MockToursService } from '../core/services/mock-tours.service';
 import { Tour } from '../core/tour';
 
 @Component({
@@ -24,15 +25,15 @@ export class NewTourPage implements OnInit {
   batteryConsumption: string;
   batteryConsumptionNumber: number;
 
-  constructor() { }
+  constructor(private mockToursService: MockToursService) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   /**
    * calculate and set tour duration in milliseconds
    */
   calculateDuration(): void {
-    if(this.startTime && this.endTime){
+    if (this.startTime && this.endTime) {
       const startDate: Date = new Date(this.startTime);
       const endDate: Date = new Date(this.endTime);
       this.duration = endDate.getTime() - startDate.getTime();
@@ -46,14 +47,14 @@ export class NewTourPage implements OnInit {
    * @param property
    */
   setPercentageValue(inputValue: any, property: string): void {
-    if(!isNaN(Number(inputValue)) && inputValue.length > 0){
-      this[property+'Number'] = Number(inputValue);
+    if (!isNaN(Number(inputValue)) && inputValue.length > 0) {
+      this[property + 'Number'] = Number(inputValue);
       this[property] = Number(inputValue) + ' %';
-    } else if (!isNaN(Number(inputValue)) && inputValue.length === 0){
-      this[property+'Number'] = undefined;
+    } else if (!isNaN(Number(inputValue)) && inputValue.length === 0) {
+      this[property + 'Number'] = undefined;
       this[property] = undefined;
     } else {
-      this[property+'Number'] = undefined;
+      this[property + 'Number'] = undefined;
       this[property] = undefined;
       alert('InputValue is not a Number');
     }
@@ -63,8 +64,9 @@ export class NewTourPage implements OnInit {
    * calculates and sets battery consumption
    */
   setBatteryConsumption(): void {
-    if(this.batteryStartNumber && this.batteryEndNumber){
-      this.batteryConsumptionNumber = this.batteryStartNumber - this.batteryEndNumber;
+    if (this.batteryStartNumber && this.batteryEndNumber) {
+      this.batteryConsumptionNumber =
+        this.batteryStartNumber - this.batteryEndNumber;
       this.batteryConsumption = this.batteryConsumptionNumber + ' %';
     } else {
       this.batteryConsumptionNumber = null;
@@ -72,8 +74,8 @@ export class NewTourPage implements OnInit {
     }
   }
 
-  saveTour(){
-    const tour: Tour = {
+  saveTour() {
+    const tour: any = {
       name: this.name,
       date: this.date,
       duration: this.duration,
@@ -82,6 +84,7 @@ export class NewTourPage implements OnInit {
       altitudeDown: this.altitudeDown,
       batteryConsumption: this.batteryConsumptionNumber,
     };
+    this.mockToursService.addTour(tour);
   }
 
 }

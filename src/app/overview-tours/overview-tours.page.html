@@ -6,7 +6,7 @@
 
 <ion-content>
 
-  <ion-list>
+  <ion-list *ngIf="tours">
     <ion-item *ngFor="let tour of tours">
       <ion-label>
         <h2>{{ tour.name }}</h2>

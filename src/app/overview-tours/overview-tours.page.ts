@@ -9,7 +9,7 @@ import { Tour } from '../core/tour';
   styleUrls: ['./overview-tours.page.scss'],
 })
 export class OverviewToursPage implements OnInit {
-  tours: Tour[] = [];
+  tours: Tour[];
 
   constructor(private mockToursService: MockToursService) { }
 
@@ -18,8 +18,7 @@ export class OverviewToursPage implements OnInit {
   }
 
   getTours(): void{
-    this.mockToursService.getTours()
-      .subscribe(tours => this.tours = tours);
+    this.tours = this.mockToursService.getTours();
   }
 
 }
