@@ -18,7 +18,7 @@ export class OverviewToursPage implements OnInit {
   }
 
   getTours(): void{
-    this.tours = this.mockToursService.getTours();
+    this.tours = this.mockToursService.getAllTours();
   }
 
 }

@@ -12,8 +12,12 @@ export class MockToursService {
     this.getMockTours();
   }
 
-  getTours(): Tour[] {
+  getAllTours(): Tour[] {
     return this.tours;
+  }
+
+  getTour(id: string): Tour{
+    return this.tours.find(mockTour => mockTour.id === id);
   }
 
   addTour(newTour: any): void {

@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tour Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item>
+      <ion-label>Tour</ion-label>
+      <ion-input type="text" [(ngModel)]="tour.name" placeholder="Bezeichnung für Tour eingeben"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Datum</ion-label>
+      <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="tour.date" placeholder="Datum eingeben"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Dauer</ion-label>
+      <ion-datetime display-format="HH:mm:ss" picker-format="HH:mm:ss" display-timezone="utc" [(ngModel)]="duration"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Distanz</ion-label>
+      <ion-input type="number" [(ngModel)]="tour.distance" placeholder="Distanz in Kilometer"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bergauf</ion-label>
+      <ion-input type="number" [(ngModel)]="tour.altitudeUp" placeholder="Höhenmeter bergauf in Metern"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bergab</ion-label>
+      <ion-input type="number" [(ngModel)]="tour.altitudeDown" placeholder="Höhenmeter bergab in Metern"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Batterie Verbrauch</ion-label>
+      <ion-input type="text" [value]="batteryConsumptionString"
+        (change)="setPercentageValue($any($event.target).value)"
+        placeholder="Verbrauch in Prozent"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-row no-padding text-center>
+    <ion-col size="6">
+      <ion-button expand="block" color="danger" fill="outline" (click)="deleteTour()">
+        <ion-icon name="trash" slot="start"></ion-icon>
+        Löschen
+      </ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button expand="block" fill="solid" color="success" (click)="updateTour()">
+        <ion-icon name="save" slot="start"></ion-icon>
+        Speichern
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
