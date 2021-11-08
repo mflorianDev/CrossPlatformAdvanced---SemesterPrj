@@ -2,7 +2,7 @@ import { Tour } from './tour';
 
 export const TOURS: Tour[] = [
   {
-    id: '4ojtoc1kj',
+    //id: '4ojtoc1kj',
     name: 'Suedtiroler Trail',
     date: '2019-10-01',
     duration: 59000,
@@ -12,7 +12,7 @@ export const TOURS: Tour[] = [
     batteryConsumption: 27,
   },
   {
-    id: 'x1pqg8h1m',
+    //id: 'x1pqg8h1m',
     name: 'Rock&Roll Trail',
     date: '2021-07-05',
     duration: 60000,
@@ -22,7 +22,7 @@ export const TOURS: Tour[] = [
     batteryConsumption: 62,
   },
   {
-    id: '57mbqoyh0',
+    //id: '57mbqoyh0',
     name: 'Anninger Trail',
     date: '2019-08-14',
     duration: 3600000,

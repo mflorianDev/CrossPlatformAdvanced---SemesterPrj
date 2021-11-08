@@ -1,8 +1,12 @@
 import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MockToursService } from '../core/services/mock-tours.service';
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+import { TourService } from '../core/services/tour.service';
 import { Tour } from '../core/tour';
+
+
 
 @Component({
   selector: 'app-new-tour',
@@ -25,7 +29,11 @@ export class NewTourPage implements OnInit {
   batteryConsumption: string;
   batteryConsumptionNumber: number;
 
-  constructor(private mockToursService: MockToursService) {}
+  constructor(
+    private router: Router,
+    private toastCtrl: ToastController,
+    private tourService: TourService,
+    ) {}
 
   ngOnInit() {}
 
@@ -84,7 +92,24 @@ export class NewTourPage implements OnInit {
       altitudeDown: this.altitudeDown,
       batteryConsumption: this.batteryConsumptionNumber,
     };
-    this.mockToursService.addTour(tour);
+    this.tourService.addTour(tour).then(
+      () => {
+        this.showToast('Tour gespeichert');
+        this.router.navigateByUrl('/overview-tours');
+      },
+      (err) => {
+        this.showToast('Ein Fehler ist aufgetreten. Tour konnte nicht gespeichert werden! :(');
+      }
+    );
+  }
+
+  showToast(msg) {
+    this.toastCtrl
+      .create({
+        message: msg,
+        duration: 2000,
+      })
+      .then((toast) => toast.present());
   }
 
 }

@@ -7,7 +7,7 @@
 <ion-content>
 
   <ion-list *ngIf="tours">
-    <ion-item button [routerLink]="['/details-tour', tour.id]" *ngFor="let tour of tours">
+    <ion-item button [routerLink]="['/details-tour', tour.id]" *ngFor="let tour of (tours | async)">
       <ion-label>
         <h2>{{ tour.name }}</h2>
         <h3>{{ tour.date | date: 'd.MMM, y' }}</h3>
