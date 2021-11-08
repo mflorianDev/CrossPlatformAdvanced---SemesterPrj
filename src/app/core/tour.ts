@@ -1,5 +1,5 @@
 export interface Tour {
-  id: string;
+  id?: string;
   name: string;
   date: string;
   duration: number; //milliseconds
