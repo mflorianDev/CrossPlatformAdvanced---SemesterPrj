@@ -1,43 +1,46 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { User } from '../user';
-
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from '@angular/fire/auth';
+import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService {
-  currentUser: User = null;
+  private auth: Auth;
 
-  constructor(private db: AngularFirestore, private afAuth: AngularFireAuth) {
-    this.afAuth.onAuthStateChanged(user => {
-      console.log('Changed: ', user);
-      this.currentUser = user;
+  constructor(private afs: Firestore) {
+    this.auth = getAuth();
+    onAuthStateChanged(this.auth, (user) => {
+      console.log('User Changed: ', user);
     });
   }
 
-  async signUp( {email, password} ){
-    const credential = await this.afAuth.createUserWithEmailAndPassword(
+  async signUp({ email, password }) {
+    const credential = await createUserWithEmailAndPassword(
+      this.auth,
       email,
       password
     );
-    console.log('result: ', credential);
-    const uid =  credential.user.uid;
     // Speichere user in einer firebase-collection
-    return this.db.doc(
-      `users/${uid}`
-    ).set({
-      uid,
-      email: credential.user.email
+    const userColRef = collection(this.afs, `users`);
+    return addDoc(userColRef, {
+      uid: credential.user.uid,
+      email: credential.user.email,
     });
   }
 
-  signIn( {email, password} ){
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+  signIn({ email, password }) {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  signOut(){
-    return this.afAuth.signOut();
+  signOut() {
+    return signOut(this.auth);
   }
 }

@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Tour } from '../tour';
 import { Observable } from 'rxjs';
-import { isEmpty, map, take } from 'rxjs/operators';
-import {
-  AngularFirestoreCollection,
-  AngularFirestore,
-  DocumentReference,
-} from '@angular/fire/compat/firestore';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { User } from '../user';
-import { TOURS } from '../mock-tours';
+import { Auth, getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import {
+  addDoc,
+  collection,
+  collectionData,
+  docData,
+  CollectionReference,
+  doc,
+  DocumentData,
+  DocumentReference,
+  Firestore,
+  updateDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +23,17 @@ import { TOURS } from '../mock-tours';
 export class TourService {
   currentUser: User = null;
   private tours: Observable<Tour[]>;
-  private tourCollection: AngularFirestoreCollection<Tour>;
+  private tourCollection: CollectionReference<DocumentData>;
 
-  constructor(private db: AngularFirestore, private afAuth: AngularFireAuth) {
-    this.afAuth.onAuthStateChanged((user) => {
-      console.log('Changed: ', user);
+  constructor(private afs: Firestore, private afAuth: Auth) {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      console.log('User Changed: ', user);
       this.currentUser = user;
     });
-    this.tourCollection = this.db.collection<Tour>('tours');
+    this.tourCollection = collection(afs, 'tours');
+    //TODO: umschreiben auf neues modulares firebase
+    /*
     // load mock-tours if collection is empty
     this.tourCollection.ref.get().then(
       (snapshot) => {
@@ -36,15 +45,10 @@ export class TourService {
         };
       }
     );
-    this.tours = this.tourCollection.snapshotChanges().pipe(
-      map((actions) =>
-        actions.map((a) => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
+    */
+    this.tours = collectionData(this.tourCollection, {
+      idField: 'id',
+    }) as Observable<Tour[]>;
   }
 
   getAllTours(): Observable<Tour[]> {
@@ -52,28 +56,22 @@ export class TourService {
   }
 
   getTour(id: string): Observable<Tour> {
-    return this.tourCollection
-      .doc<Tour>(id)
-      .valueChanges()
-      .pipe(
-        take(1),
-        map((tour) => {
-          tour.id = id;
-          return tour;
-        })
-      );
+    const tourDocRef = doc(this.afs, `tours/${id}`);
+    return docData(tourDocRef, { idField: 'id' }) as Observable<Tour>;
   }
 
   addTour(tour: Tour): Promise<DocumentReference> {
-    return this.tourCollection.add(tour);
+    return addDoc(this.tourCollection, tour);
   }
 
   updateTour(tour: Tour): Promise<void> {
     const { id, ...tourNoId } = tour;
-    return this.tourCollection.doc(tour.id).update(tourNoId);
+    const tourDocRef = doc(this.afs, `tours/${id}`);
+    return updateDoc(tourDocRef, {tourNoId});
   }
 
   deleteTour(id: string): Promise<void> {
-    return this.tourCollection.doc(id).delete();
+    const tourDocRef = doc(this.afs, `tours/${id}`);
+    return deleteDoc(tourDocRef);
   }
 }
