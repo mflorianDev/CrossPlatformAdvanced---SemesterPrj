@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Tour } from '../tour';
 import { Observable } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
 import { User } from '../user';
-import { Auth, getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   addDoc,
   collection,
@@ -15,7 +15,9 @@ import {
   Firestore,
   updateDoc,
   deleteDoc,
+  getDocs,
 } from '@angular/fire/firestore';
+import { TOURS } from '../mock-tours';
 
 @Injectable({
   providedIn: 'root',
@@ -25,17 +27,19 @@ export class TourService {
   private tours: Observable<Tour[]>;
   private tourCollection: CollectionReference<DocumentData>;
 
-  constructor(private afs: Firestore, private afAuth: Auth) {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      console.log('User Changed: ', user);
-      this.currentUser = user;
-    });
-    this.tourCollection = collection(afs, 'tours');
-    //TODO: umschreiben auf neues modulares firebase
-    /*
+  constructor(
+    private afs: Firestore,
+    private authService: AuthenticationService
+  ) {
+    // Get current user from AuthenticationService
+    this.currentUser = this.authService.getCurrentUser();
+    // Get collection reference for current user from Firestore
+    this.tourCollection = collection(
+      afs,
+      `users/${this.currentUser.uid}/tours`
+    );
     // load mock-tours if collection is empty
-    this.tourCollection.ref.get().then(
+    getDocs(this.tourCollection).then(
       (snapshot) => {
         //console.log(snapshot.empty);
         //console.log(snapshot.size);
@@ -45,7 +49,7 @@ export class TourService {
         };
       }
     );
-    */
+    // load tours for current user from Firestore
     this.tours = collectionData(this.tourCollection, {
       idField: 'id',
     }) as Observable<Tour[]>;
@@ -56,7 +60,10 @@ export class TourService {
   }
 
   getTour(id: string): Observable<Tour> {
-    const tourDocRef = doc(this.afs, `tours/${id}`);
+    const tourDocRef = doc(
+      this.afs,
+      `users/${this.currentUser.uid}/tours/${id}`
+    );
     return docData(tourDocRef, { idField: 'id' }) as Observable<Tour>;
   }
 
@@ -66,12 +73,18 @@ export class TourService {
 
   updateTour(tour: Tour): Promise<void> {
     const { id, ...tourNoId } = tour;
-    const tourDocRef = doc(this.afs, `tours/${id}`);
-    return updateDoc(tourDocRef, {tourNoId});
+    const tourDocRef = doc(
+      this.afs,
+      `users/${this.currentUser.uid}/tours/${id}`
+    );
+    return updateDoc(tourDocRef, { tourNoId });
   }
 
   deleteTour(id: string): Promise<void> {
-    const tourDocRef = doc(this.afs, `tours/${id}`);
+    const tourDocRef = doc(
+      this.afs,
+      `users/${this.currentUser.uid}/tours/${id}`
+    );
     return deleteDoc(tourDocRef);
   }
 }
