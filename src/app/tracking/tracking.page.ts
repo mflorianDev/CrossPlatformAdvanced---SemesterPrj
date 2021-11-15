@@ -48,7 +48,10 @@ export class TrackingPage implements OnInit, OnDestroy {
   currentUser: User;
   unsubscribe: Unsubscribe;
 
-  constructor(private afs: Firestore, private authService: AuthenticationService) {
+  constructor(
+    private afs: Firestore,
+    private authService: AuthenticationService
+  ) {
     this.init();
   }
 
@@ -88,11 +91,15 @@ export class TrackingPage implements OnInit, OnDestroy {
   }
 
   // Initialize a blank map
-  loadMap() {
-    const latLng = new google.maps.LatLng(51.9036442, 7.6673267);
+  async loadMap() {
+    const currentPosition = await Geolocation.getCurrentPosition();
+    const latLng = new google.maps.LatLng(
+      currentPosition.coords.latitude,
+      currentPosition.coords.longitude
+    );
     const mapOptions = {
       center: latLng,
-      zoom: 5,
+      zoom: 15,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
@@ -101,21 +108,24 @@ export class TrackingPage implements OnInit, OnDestroy {
   // Use Capacitor to track our geolocation
   async startTracking() {
     this.isTracking = true;
-    this.watchID = await Geolocation.watchPosition({}, (position, err) => {
-      const newLat = position.coords.latitude;
-      const newLong = position.coords.longitude;
-      // watchPosition often fires twice, therefore check if position is a new position
-      if (this.oldLat !== newLat && this.oldLong !== newLong) {
-        this.addNewLocation(
-          newLat,
-          newLong,
-          position.coords.altitude,
-          position.timestamp
-        );
-        this.oldLat = newLat;
-        this.oldLong = newLong;
+    this.watchID = await Geolocation.watchPosition(
+      { enableHighAccuracy: true },
+      (position, err) => {
+        const newLat = position.coords.latitude;
+        const newLong = position.coords.longitude;
+        // watchPosition often fires twice, therefore check if position is a new position
+        if (this.oldLat !== newLat && this.oldLong !== newLong) {
+          this.addNewLocation(
+            newLat,
+            newLong,
+            position.coords.altitude,
+            position.timestamp
+          );
+          this.oldLat = newLat;
+          this.oldLong = newLong;
+        }
       }
-    });
+    );
   }
 
   // Unsubscribe from the geolocation watch using the initial ID
@@ -137,7 +147,7 @@ export class TrackingPage implements OnInit, OnDestroy {
 
     const position = new google.maps.LatLng(lat, lng);
     this.map.setCenter(position);
-    this.map.setZoom(5);
+    this.map.setZoom(17);
   }
 
   // Delete a location from Firebase
@@ -150,9 +160,12 @@ export class TrackingPage implements OnInit, OnDestroy {
     // Remove all current marker
     this.markers.map((marker) => marker.setMap(null));
     this.markers = [];
-    // Add all markers to the map
-    for (const loc of locations) {
-      const latLng = new google.maps.LatLng(loc.lat, loc.lng);
+    // Add marker for current position to the
+    if (locations.length !== 0) {
+      const latLng = new google.maps.LatLng(
+        locations.at(-1).lat,
+        locations.at(-1).lng
+      );
       const marker = new google.maps.Marker({
         map: this.map,
         animation: google.maps.Animation.DROP,
@@ -217,4 +230,22 @@ export class TrackingPage implements OnInit, OnDestroy {
     console.log(`uphill:  ${uphill.toFixed(2)} meters`);
     console.log(`downhill:  ${downhill.toFixed(2)} meters`);
   }
+
+  /*
+  setMarkerForAllLocations() {
+    // Remove all current marker
+    this.markers.map((marker) => marker.setMap(null));
+    this.markers = [];
+    // Add all markers to the map
+    for (const loc of this.locations) {
+      const latLng = new google.maps.LatLng(loc.lat, loc.lng);
+      const marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: latLng,
+      });
+      this.markers.push(marker);
+    }
+  }
+  */
 }
