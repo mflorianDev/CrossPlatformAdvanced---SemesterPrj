@@ -1,7 +1,7 @@
 import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TourService } from '../core/services/tour.service';
 import { Tour } from '../core/tour';
@@ -30,12 +30,26 @@ export class NewTourPage implements OnInit {
   batteryConsumptionNumber: number;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private toastCtrl: ToastController,
     private tourService: TourService,
     ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.route.snapshot.paramMap.get('trackingData')){
+      const trackingData = JSON.parse(this.route.snapshot.paramMap.get('trackingData'));
+      this.loadTrackingData(trackingData);
+    }
+  }
+
+  loadTrackingData(trackingData: any): void {
+    this.startTime = new Date(trackingData.startTime).toISOString();
+    this.endTime = new Date(trackingData.endTime).toISOString();
+    this.distance = trackingData.distance;
+    this.altitudeUp = trackingData.altitudeUp;
+    this.altitudeDown = trackingData.altitudeDown;
+  }
 
   /**
    * calculate and set tour duration in milliseconds
@@ -83,6 +97,10 @@ export class NewTourPage implements OnInit {
   }
 
   saveTour() {
+    // Run functions to ensure duration and batteryConsumption are not undefined (for example when tracking data was loaded)
+    this.calculateDuration();
+    this.setBatteryConsumption();
+    // Create tour object with necessary properties for firestore
     const tour: any = {
       name: this.name,
       date: this.date,
@@ -92,6 +110,7 @@ export class NewTourPage implements OnInit {
       altitudeDown: this.altitudeDown,
       batteryConsumption: this.batteryConsumptionNumber,
     };
+    // Save tour on firestore
     this.tourService.addTour(tour).then(
       () => {
         this.showToast('Tour gespeichert');

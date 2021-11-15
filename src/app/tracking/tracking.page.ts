@@ -23,6 +23,7 @@ import {
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { orderBy } from '@firebase/firestore';
 import { AuthenticationService } from '../core/services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking',
@@ -48,7 +49,15 @@ export class TrackingPage implements OnInit, OnDestroy {
   currentUser: User;
   unsubscribe: Unsubscribe;
 
+  // Tour Data
+  startTime: number;
+  endTime: number;
+  distance: number;
+  altitudeUp: number;
+  altitudeDown: number;
+
   constructor(
+    private router: Router,
     private afs: Firestore,
     private authService: AuthenticationService
   ) {
@@ -133,6 +142,17 @@ export class TrackingPage implements OnInit, OnDestroy {
     Geolocation.clearWatch({ id: this.watchID }).then(() => {
       this.isTracking = false;
     });
+    const tourData = {
+      startTime: this.startTime,
+      endTime: this.endTime,
+      distance: this.distance / 1000,
+      altitudeUp: this.altitudeUp,
+      altitudeDown: this.altitudeDown,
+    };
+    this.router.navigate([
+      '/new-tour',
+      { trackingData: JSON.stringify(tourData) },
+    ]);
   }
 
   // Save a new location to Firebase and center the map
@@ -190,6 +210,17 @@ export class TrackingPage implements OnInit, OnDestroy {
     });
     this.polylines.push(polyline);
 
+    // Set startTime and endTime
+    if (locations[0]) {
+      this.startTime = locations[0].timestamp;
+    } else {
+      this.startTime = null;
+    }
+    if (locations.at(-1)) {
+      this.endTime = locations.at(-1).timestamp;
+    } else {
+      this.endTime = null;
+    }
     // Calculate path distance
     /*
     const pos1 = this.markers[0].getPosition() as google.maps.LatLng;
@@ -197,12 +228,12 @@ export class TrackingPage implements OnInit, OnDestroy {
     const dist = google.maps.geometry.spherical.computeDistanceBetween(pos1, pos2);
     console.log('MarkerDistance: ', dist);
     */
-    let distance = 0;
-    let uphill = 0;
-    let downhill = 0;
+    this.distance = 0;
+    this.altitudeUp = 0;
+    this.altitudeDown = 0;
     if (locations.length > 1) {
       for (let i = 0; i < locations.length - 1; i++) {
-        // Calculate distance between two coordinates
+        // Calculate distance in meters between two coordinates
         const latLng1 = new google.maps.LatLng(
           locations[i].lat,
           locations[i].lng
@@ -211,7 +242,7 @@ export class TrackingPage implements OnInit, OnDestroy {
           locations[i + 1].lat,
           locations[i + 1].lng
         );
-        distance += google.maps.geometry.spherical.computeDistanceBetween(
+        this.distance += google.maps.geometry.spherical.computeDistanceBetween(
           latLng1,
           latLng2
         );
@@ -219,16 +250,20 @@ export class TrackingPage implements OnInit, OnDestroy {
         if (locations[i].alt) {
           const altDiff = locations[i + 1].alt - locations[i].alt;
           if (altDiff >= 0) {
-            uphill += altDiff;
+            this.altitudeUp += altDiff;
           } else {
-            downhill += altDiff;
+            this.altitudeDown += altDiff;
           }
         }
       }
     }
-    console.log(`distance:  ${distance.toFixed(2)} meters`);
-    console.log(`uphill:  ${uphill.toFixed(2)} meters`);
-    console.log(`downhill:  ${downhill.toFixed(2)} meters`);
+    /*
+    console.log(`startTime:  ${this.startTime} timestamp`);
+    console.log(`endTime:  ${this.endTime} timestamp`);
+    console.log(`distance:  ${this.distance.toFixed(2)} meters`);
+    console.log(`uphill:  ${this.altitudeUp.toFixed(2)} meters`);
+    console.log(`downhill:  ${this.altitudeDown.toFixed(2)} meters`);
+    */
   }
 
   /*
