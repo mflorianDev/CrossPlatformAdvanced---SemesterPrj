@@ -6,8 +6,6 @@ import { ToastController } from '@ionic/angular';
 import { TourService } from '../core/services/tour.service';
 import { Tour } from '../core/tour';
 
-
-
 @Component({
   selector: 'app-new-tour',
   templateUrl: './new-tour.page.html',
@@ -22,23 +20,22 @@ export class NewTourPage implements OnInit {
   distance: number;
   altitudeUp: number;
   altitudeDown: number;
-  batteryStart: string;
-  batteryEnd: string;
-  batteryStartNumber: number;
-  batteryEndNumber: number;
-  batteryConsumption: string;
-  batteryConsumptionNumber: number;
+  batteryStart: number;
+  batteryEnd: number;
+  batteryConsumption: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private toastCtrl: ToastController,
-    private tourService: TourService,
-    ) {}
+    private tourService: TourService
+  ) {}
 
   ngOnInit() {
-    if (this.route.snapshot.paramMap.get('trackingData')){
-      const trackingData = JSON.parse(this.route.snapshot.paramMap.get('trackingData'));
+    if (this.route.snapshot.paramMap.get('trackingData')) {
+      const trackingData = JSON.parse(
+        this.route.snapshot.paramMap.get('trackingData')
+      );
       this.loadTrackingData(trackingData);
     }
   }
@@ -63,35 +60,12 @@ export class NewTourPage implements OnInit {
   }
 
   /**
-   * pecentage symbol added to input value
-   *
-   * @param inputValue
-   * @param property
-   */
-  setPercentageValue(inputValue: any, property: string): void {
-    if (!isNaN(Number(inputValue)) && inputValue.length > 0) {
-      this[property + 'Number'] = Number(inputValue);
-      this[property] = Number(inputValue) + ' %';
-    } else if (!isNaN(Number(inputValue)) && inputValue.length === 0) {
-      this[property + 'Number'] = undefined;
-      this[property] = undefined;
-    } else {
-      this[property + 'Number'] = undefined;
-      this[property] = undefined;
-      alert('InputValue is not a Number');
-    }
-  }
-
-  /**
    * calculates and sets battery consumption
    */
   setBatteryConsumption(): void {
-    if (this.batteryStartNumber && this.batteryEndNumber) {
-      this.batteryConsumptionNumber =
-        this.batteryStartNumber - this.batteryEndNumber;
-      this.batteryConsumption = this.batteryConsumptionNumber + ' %';
+    if (this.batteryStart != null && this.batteryEnd != null) {
+      this.batteryConsumption = this.batteryStart - this.batteryEnd;
     } else {
-      this.batteryConsumptionNumber = null;
       this.batteryConsumption = null;
     }
   }
@@ -108,7 +82,7 @@ export class NewTourPage implements OnInit {
       distance: this.distance,
       altitudeUp: this.altitudeUp,
       altitudeDown: this.altitudeDown,
-      batteryConsumption: this.batteryConsumptionNumber,
+      batteryConsumption: this.batteryConsumption,
     };
     // Save tour on firestore
     this.tourService.addTour(tour).then(
@@ -117,7 +91,9 @@ export class NewTourPage implements OnInit {
         this.router.navigateByUrl('/overview-tours');
       },
       (err) => {
-        this.showToast('Ein Fehler ist aufgetreten. Tour konnte nicht gespeichert werden! :(');
+        this.showToast(
+          'Ein Fehler ist aufgetreten. Tour konnte nicht gespeichert werden! :('
+        );
       }
     );
   }
@@ -130,5 +106,4 @@ export class NewTourPage implements OnInit {
       })
       .then((toast) => toast.present());
   }
-
 }

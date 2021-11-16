@@ -5,49 +5,45 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
+  <ion-list lines="full">
     <ion-item>
-      <ion-label>Tour</ion-label>
+      <ion-label position="floating">Tour</ion-label>
       <ion-input type="text" [(ngModel)]="name" placeholder="Bezeichnung für Tour eingeben"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Datum</ion-label>
+      <ion-label position="floating">Datum</ion-label>
       <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="date" placeholder="Datum eingeben"></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Uhrzeit Start</ion-label>
-      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="startTime" (ngModelChange)="calculateDuration()" placeholder="Startzeit eingeben"></ion-datetime>
+      <ion-label position="floating">Uhrzeit Start</ion-label>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="startTime" (ngModelChange)="calculateDuration()"></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Uhrzeit Ende</ion-label>
-      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="endTime" (ngModelChange)="calculateDuration()" placeholder="Endzeit eingeben"></ion-datetime>
+      <ion-label position="floating">Uhrzeit Ende</ion-label>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="endTime" (ngModelChange)="calculateDuration()"></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Distanz</ion-label>
+      <ion-label position="floating">Distanz <span class="label-description">[km]</span></ion-label>
       <ion-input type="number" [(ngModel)]="distance" placeholder="Distanz in Kilometer"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Bergauf</ion-label>
+      <ion-label position="floating">Bergauf<span class="label-description">[m]</span></ion-label>
       <ion-input type="number" [(ngModel)]="altitudeUp" placeholder="Höhenmeter bergauf in Metern"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Bergab</ion-label>
+      <ion-label position="floating">Bergab<span class="label-description">[m]</span></ion-label>
       <ion-input type="number" [(ngModel)]="altitudeDown" placeholder="Höhenmeter bergab in Metern"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Batteriestatus Start</ion-label>
-      <ion-input type="text" [value]="batteryStart"
-        (change)="setPercentageValue($any($event.target).value, 'batteryStart'); setBatteryConsumption()"
-        placeholder="Ladezustand in Prozent"></ion-input>
+      <ion-label position="floating">Batteriestatus Start<span class="label-description">[%]</span></ion-label>
+      <ion-input type="number" [(ngModel)]="batteryStart" (change)="setBatteryConsumption()" placeholder="Ladezustand in Prozent"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Batteriestatus Ende</ion-label>
-      <ion-input type="text" [value]="batteryEnd"
-        (change)="setPercentageValue($any($event.target).value, 'batteryEnd'); setBatteryConsumption()"
-        placeholder="Ladezustand in Prozent"></ion-input>
+      <ion-label position="floating">Batteriestatus Ende<span class="label-description">[%]</span></ion-label>
+      <ion-input type="number" [(ngModel)]="batteryEnd" (change)="setBatteryConsumption()" placeholder="Ladezustand in Prozent"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Batterie Verbrauch</ion-label>
+      <ion-label position="floating">Batterie Verbrauch <span class="label-description">[%]</span></ion-label>
       <p>{{ batteryConsumption }}</p>
     </ion-item>
   </ion-list>
