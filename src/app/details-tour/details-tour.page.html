@@ -7,34 +7,32 @@
 <ion-content [fullscreen]="true">
   <ion-list>
     <ion-item>
-      <ion-label>Tour</ion-label>
+      <ion-label position="floating">Tour</ion-label>
       <ion-input type="text" [(ngModel)]="tour.name" placeholder="Bezeichnung für Tour eingeben"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Datum</ion-label>
+      <ion-label position="floating">Datum</ion-label>
       <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="tour.date" placeholder="Datum eingeben"></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Dauer</ion-label>
-      <ion-datetime display-format="HH:mm:ss" picker-format="HH:mm:ss" display-timezone="utc" [(ngModel)]="duration"></ion-datetime>
+      <ion-label position="floating">Dauer<span class="label-description">[hh:mm]</span></ion-label>
+      <ion-datetime display-format="HH:mm" picker-format="HH:mm" display-timezone="utc" [(ngModel)]="duration"></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Distanz</ion-label>
+      <ion-label position="floating">Distanz<span class="label-description">[km]</span></ion-label>
       <ion-input type="number" [(ngModel)]="tour.distance" placeholder="Distanz in Kilometer"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Bergauf</ion-label>
+      <ion-label position="floating">Bergauf<span class="label-description">[m]</span></ion-label>
       <ion-input type="number" [(ngModel)]="tour.altitudeUp" placeholder="Höhenmeter bergauf in Metern"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Bergab</ion-label>
+      <ion-label position="floating">Bergab<span class="label-description">[m]</span></ion-label>
       <ion-input type="number" [(ngModel)]="tour.altitudeDown" placeholder="Höhenmeter bergab in Metern"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Batterie Verbrauch</ion-label>
-      <ion-input type="text" [value]="batteryConsumptionString"
-        (change)="setPercentageValue($any($event.target).value)"
-        placeholder="Verbrauch in Prozent"></ion-input>
+      <ion-label position="floating">Batterie Verbrauch<span class="label-description">[%]</span></ion-label>
+      <ion-input type="text" [(ngModel)]="tour.batteryConsumption" placeholder="Verbrauch in Prozent"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { MockToursService } from '../core/services/mock-tours.service';
 import { TourService } from '../core/services/tour.service';
 import { Tour } from '../core/tour';
 
@@ -24,13 +23,11 @@ export class DetailsTourPage implements OnInit, OnDestroy {
     batteryConsumption: null,
   };
   duration: string;
-  batteryConsumptionString: string;
   tourServiceSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private mockToursService: MockToursService,
     private tourService: TourService,
     private toastCtrl: ToastController
   ) {}
@@ -38,10 +35,9 @@ export class DetailsTourPage implements OnInit, OnDestroy {
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
-      //this.tour = this.mockToursService.getTour(id);
       this.tourServiceSubscription = this.tourService.getTour(id).subscribe((tour) => {
         this.tour = tour;
-        this.batteryConsumptionString = this.tour.batteryConsumption + ' %';
+        // convert tour.duration from milliseconds to ISO 8601 datetime format for ion-datetime element
         this.duration = moment(this.tour.duration).toISOString();
       });
     }
@@ -51,27 +47,7 @@ export class DetailsTourPage implements OnInit, OnDestroy {
     this.tourServiceSubscription.unsubscribe();
   }
 
-  /**
-   * pecentage symbol added to input value
-   *
-   * @param inputValue
-   * @param property
-   */
-  setPercentageValue(inputValue: any): void {
-    if (!isNaN(Number(inputValue)) && inputValue.length > 0) {
-      this.batteryConsumptionString = Number(inputValue) + ' %';
-    } else if (!isNaN(Number(inputValue)) && inputValue.length === 0) {
-      this.batteryConsumptionString = undefined;
-      this.tour.batteryConsumption = undefined;
-    } else {
-      this.batteryConsumptionString = undefined;
-      this.tour.batteryConsumption = undefined;
-      alert('InputValue is not a Number');
-    }
-  }
-
   deleteTour(): void {
-    //this.mockToursService.deleteTour(this.tour.id);
     this.tourService.deleteTour(this.tour.id).then(
       () => {
         this.showToast('Tour gelöscht');
@@ -84,8 +60,8 @@ export class DetailsTourPage implements OnInit, OnDestroy {
   }
 
   updateTour(): void {
+    // convert tour.duration from ISO 8601 datetime format to milliseconds
     this.tour.duration = new Date(this.duration).getTime();
-    //this.mockToursService.updateTour(this.tour);
     this.tourService.updateTour(this.tour).then(
       () => {
         this.showToast('Tour geändert');
