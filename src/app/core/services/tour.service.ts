@@ -77,7 +77,7 @@ export class TourService {
       this.afs,
       `users/${this.currentUser.uid}/tours/${id}`
     );
-    return updateDoc(tourDocRef, { tourNoId });
+    return updateDoc(tourDocRef, { ...tourNoId } );
   }
 
   deleteTour(id: string): Promise<void> {

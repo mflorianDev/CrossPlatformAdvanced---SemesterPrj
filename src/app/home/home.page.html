@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Home</ion-title>
+    <ion-title style="text-align: center">Home</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="clear" (click)="signOut()">
         <ion-icon name="log-out" slot="icon-only"></ion-icon>
@@ -10,10 +10,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
-  <ion-button routerLink="/new-tour" expand="full" color="secondary">Neue Tour</ion-button>
-  <ion-button routerLink="/overview-tours" expand="full" color="primary">Tourenübersicht</ion-button>
-  <ion-button routerLink="/tracking" expand="full" color="tertiary">Tracking</ion-button>
-
-
+  <ion-button routerLink="/new-tour" expand="full" color="secondary"
+    >Neue Tour</ion-button
+  >
+  <ion-button routerLink="/overview-tours" expand="full" color="primary"
+    >Tourenübersicht</ion-button
+  >
+  <ion-button routerLink="/tracking" expand="full" color="tertiary"
+    >Tracking</ion-button
+  >
 </ion-content>

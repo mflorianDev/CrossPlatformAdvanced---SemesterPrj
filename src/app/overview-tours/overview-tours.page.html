@@ -1,5 +1,11 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-back-button defaultHref="home" color="dark"></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title>Tourenübersicht</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -12,7 +18,7 @@
         <h2>{{ tour.name }}</h2>
         <h3>{{ tour.date | date: 'd.MMM, y' }}</h3>
         <p>Dauer: {{ tour.duration | date: 'HH:mm:ss' : 'GMT' }}</p> <!--GMT necessary to prevent time offset-->
-        <p>Distanz: {{ tour.distance }} km</p>
+        <p>Distanz: {{ tour.distance | number: '1.2-2' }} km</p>
         <p>Bergauf: {{ tour.altitudeUp }} m</p>
         <p>Bergauf: {{ tour.altitudeDown }} m</p>
         <p>Batterie: {{ tour.batteryConsumption }} %</p>

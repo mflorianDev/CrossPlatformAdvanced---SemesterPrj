@@ -7,7 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,7 @@ export class AuthenticationService {
     );
     // Speichere user in einer firebase-collection
     const userColRef = collection(this.afs, `users`);
-    return addDoc(userColRef, {
+    return setDoc(doc(this.afs, `users`, credential.user.uid), {
       uid: credential.user.uid,
       email: credential.user.email,
     });
