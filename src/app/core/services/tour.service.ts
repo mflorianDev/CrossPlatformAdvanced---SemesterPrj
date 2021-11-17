@@ -23,9 +23,9 @@ import { TOURS } from '../mock-tours';
   providedIn: 'root',
 })
 export class TourService {
-  currentUser: User = null;
+  private currentUser: User = null;
   private tours: Observable<Tour[]>;
-  private tourCollection: CollectionReference<DocumentData>;
+  private tourColRef: CollectionReference<DocumentData>;
 
   constructor(
     private afs: Firestore,
@@ -33,13 +33,10 @@ export class TourService {
   ) {
     // Get current user from AuthenticationService
     this.currentUser = this.authService.getCurrentUser();
-    // Get collection reference for current user from Firestore
-    this.tourCollection = collection(
-      afs,
-      `users/${this.currentUser.uid}/tours`
-    );
-    // load mock-tours if collection is empty
-    getDocs(this.tourCollection).then(
+    // Get tour collection reference for current user (userDocRef from AuthenticationService)
+    this.tourColRef = collection(this.authService.getUserDocRef(), `/tours`);
+    // Load mock-tours if collection is empty
+    getDocs(this.tourColRef).then(
       (snapshot) => {
         //console.log(snapshot.empty);
         //console.log(snapshot.size);
@@ -49,10 +46,8 @@ export class TourService {
         };
       }
     );
-    // load tours for current user from Firestore
-    this.tours = collectionData(this.tourCollection, {
-      idField: 'id',
-    }) as Observable<Tour[]>;
+    // Load tours for current user from Firestore
+    this.tours = collectionData(this.tourColRef, { idField: 'id' }) as Observable<Tour[]>;
   }
 
   getAllTours(): Observable<Tour[]> {
@@ -60,31 +55,22 @@ export class TourService {
   }
 
   getTour(id: string): Observable<Tour> {
-    const tourDocRef = doc(
-      this.afs,
-      `users/${this.currentUser.uid}/tours/${id}`
-    );
+    const tourDocRef = doc(this.tourColRef, `/${id}`);
     return docData(tourDocRef, { idField: 'id' }) as Observable<Tour>;
   }
 
   addTour(tour: Tour): Promise<DocumentReference> {
-    return addDoc(this.tourCollection, tour);
+    return addDoc(this.tourColRef, tour);
   }
 
   updateTour(tour: Tour): Promise<void> {
     const { id, ...tourNoId } = tour;
-    const tourDocRef = doc(
-      this.afs,
-      `users/${this.currentUser.uid}/tours/${id}`
-    );
+    const tourDocRef = doc(this.tourColRef, `/${id}`);
     return updateDoc(tourDocRef, { ...tourNoId } );
   }
 
   deleteTour(id: string): Promise<void> {
-    const tourDocRef = doc(
-      this.afs,
-      `users/${this.currentUser.uid}/tours/${id}`
-    );
+    const tourDocRef = doc(this.tourColRef, `/${id}`);
     return deleteDoc(tourDocRef);
   }
 }

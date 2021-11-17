@@ -6,45 +6,52 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  User,
+  UserCredential,
 } from '@angular/fire/auth';
-import { addDoc, collection, doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { DocumentReference, collection, CollectionReference, doc, DocumentData, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   private auth: Auth;
+  private userDocRef: DocumentReference;
 
   constructor(private afs: Firestore) {
     this.auth = getAuth();
     onAuthStateChanged(this.auth, (user) => {
-      console.log('User Changed: ', user);
+      console.log('User Changed: ', user.email);
     });
   }
 
-  async signUp({ email, password }) {
+  async signUp({ email, password }): Promise<void> {
     const credential = await createUserWithEmailAndPassword(
       this.auth,
       email,
       password
     );
     // Speichere user in einer firebase-collection
-    const userColRef = collection(this.afs, `users`);
-    return setDoc(doc(this.afs, `users`, credential.user.uid), {
+    this.userDocRef = doc(this.afs, `users`, credential.user.uid);
+    return setDoc(this.userDocRef, {
       uid: credential.user.uid,
       email: credential.user.email,
     });
   }
 
-  signIn({ email, password }) {
+  signIn({ email, password }): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  signOut() {
+  signOut(): Promise<void> {
     return signOut(this.auth);
   }
 
-  getCurrentUser(){
+  getCurrentUser(): User {
     return this.auth.currentUser;
+  }
+
+  getUserDocRef(): DocumentReference {
+    return this.userDocRef;
   }
 }
