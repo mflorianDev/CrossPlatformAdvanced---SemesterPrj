@@ -51,8 +51,26 @@
       <p>{{ positions.length }}</p>
     </ion-item>
   </ion-list>
-  <ion-button expand="full" (click)="saveTour()">Speichern</ion-button>
 </ion-content>
+
+<ion-footer>
+
+  <ion-row no-padding text-center>
+    <ion-col size="6">
+      <ion-button expand="block" color="danger" fill="solid" (click)="discardTour()">
+        <ion-icon name="trash" slot="start"></ion-icon>
+        Löschen
+      </ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button expand="block" color="success" fill="solid" (click)="saveTour()">
+        <ion-icon name="save" slot="start"></ion-icon>
+        Speichern
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+</ion-footer>
 
 <ion-footer>
   <app-menu></app-menu>

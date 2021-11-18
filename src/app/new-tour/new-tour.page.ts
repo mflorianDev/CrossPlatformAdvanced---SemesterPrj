@@ -12,7 +12,7 @@ import { TrackingTour } from '../core/tracking-tour';
 })
 export class NewTourPage implements OnInit {
   name: string;
-  date: string = new Date().toISOString().slice(0, 10);
+  date: string;
   startTime: string;
   endTime: string;
   duration: number;
@@ -71,6 +71,7 @@ export class NewTourPage implements OnInit {
     }
   }
 
+  // Save tour
   saveTour() {
     // Run functions to ensure duration and batteryConsumption are not undefined (for example when tracking data was loaded)
     this.calculateDuration();
@@ -98,6 +99,23 @@ export class NewTourPage implements OnInit {
         );
       }
     );
+  }
+
+  // Reset parameters
+  discardTour(){
+    this.name = undefined;
+    this.date = undefined;
+    this.startTime = undefined;
+    this.endTime = undefined;
+    this.duration = undefined;
+    this.distance = undefined;
+    this.altitudeUp = undefined;
+    this.altitudeDown = undefined;
+    this.batteryStart = undefined;
+    this.batteryEnd = undefined;
+    this.batteryConsumption = undefined;
+    this.positions = undefined;
+    this.showToast('Tour gelöscht');
   }
 
   showToast(msg) {
