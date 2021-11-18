@@ -4,12 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-
+<ion-content class="container">
+  <ion-card class="card-center">
   <form [formGroup]="credentialForm">
 
     <ion-item>
-      <ion-input
+      <ion-input class="center-text"
         placeholder="Email address"
         formControlName="email"
         autofocus="true"
@@ -22,7 +22,7 @@
     </div>
 
     <ion-item>
-      <ion-input
+      <ion-input class="center-text"
         placeholder="Password"
         type="password"
         formControlName="password"
@@ -36,7 +36,7 @@
 
   </form>
 
-  <ion-button (click)="signUp()" expand="full">Sign up</ion-button>
+  <ion-button (click)="signUp()" expand="full" class="center-text">Sign up</ion-button>
   <ion-button (click)="signIn()" expand="full" color="secondary">Sign in</ion-button>
-
+</ion-card>
 </ion-content>
