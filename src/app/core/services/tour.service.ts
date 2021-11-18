@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Tour } from '../tour';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
-import { User } from '../user';
 import {
   addDoc,
   collection,
@@ -12,12 +11,11 @@ import {
   doc,
   DocumentData,
   DocumentReference,
-  Firestore,
   updateDoc,
   deleteDoc,
   getDocs,
 } from '@angular/fire/firestore';
-import { TOURS } from '../mock-tours';
+import { MOCKTOURS } from '../mock-tours';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +36,7 @@ export class TourService {
         //console.log(snapshot.size);
         //console.log(snapshot.docs);
         if (snapshot.size === 0){
-          TOURS.forEach(tour => this.addTour(tour));
+          MOCKTOURS.forEach(tour => this.addTour(tour));
         };
       }
     );

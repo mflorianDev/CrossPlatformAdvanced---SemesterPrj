@@ -1,6 +1,6 @@
 import { Tour } from './tour';
 
-export const TOURS: Tour[] = [
+export const MOCKTOURS: Tour[] = [
   {
     //id: '4ojtoc1kj',
     name: 'Suedtiroler Trail',

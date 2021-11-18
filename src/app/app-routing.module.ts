@@ -31,7 +31,7 @@ const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin),
   },
   {
-    path: 'new-tour/:trackingData',
+    path: 'new-tour/:trackingTour',
     loadChildren: () => import('./new-tour/new-tour.module').then( m => m.NewTourPageModule),
     ...canActivate(redirectUnauthorizedToLogin),
   },

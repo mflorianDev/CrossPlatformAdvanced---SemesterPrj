@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
 import { Router } from '@angular/router';
+import { TrackingTour } from '../core/tracking-tour';
 
 @Component({
   selector: 'app-tracking',
@@ -45,12 +46,12 @@ export class TrackingPage {
   }
 
   // Initialize settings
-  init() {
+  init(): void {
     this.locations = [];
   }
 
   // Initialize a blank map
-  async loadMap() {
+  async loadMap(): Promise<void> {
     const currentPosition = await Geolocation.getCurrentPosition();
     const latLng = new google.maps.LatLng(
       currentPosition.coords.latitude,
@@ -64,15 +65,15 @@ export class TrackingPage {
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
 
-  // Use Capacitor to track our geolocation
-  async startTracking() {
+  // Start geolocation tracking with Capacitor geolocation plugin
+  async startTracking(): Promise<void> {
     this.isTracking = true;
     this.watchID = await Geolocation.watchPosition(
       { enableHighAccuracy: true },
       (position, err) => {
         const newLat = position.coords.latitude;
         const newLong = position.coords.longitude;
-        // watchPosition often fires twice, therefore check if position is a new position
+        // function 'watchPosition' often fires twice, therefore check if position is a new position
         if (this.oldLat !== newLat && this.oldLong !== newLong) {
           const positionData = {
             lat: newLat,
@@ -89,13 +90,13 @@ export class TrackingPage {
   }
 
   // Unsubscribe from the geolocation watch using the initial ID
-  stopTracking() {
+  stopTracking(): void {
     Geolocation.clearWatch({ id: this.watchID }).then(() => {
       this.isTracking = false;
     });
-    const tourData = {
-      startTime: this.startTime,
-      endTime: this.endTime,
+    const trackingTour: TrackingTour = {
+      startTime: new Date(this.startTime).toISOString(),
+      endTime: new Date(this.endTime).toISOString(),
       distance: this.distance / 1000,
       altitudeUp: this.altitudeUp,
       altitudeDown: this.altitudeDown,
@@ -103,12 +104,12 @@ export class TrackingPage {
     };
     this.router.navigate([
       '/new-tour',
-      { trackingData: JSON.stringify(tourData) },
+      { trackingTour: JSON.stringify(trackingTour) },
     ]);
   }
 
-  // Save a new location to Firebase and center the map
-  addNewLocation(position) {
+  // Add a new position and update the map
+  addNewLocation(position): void {
     this.locations.push(position);
     console.log('Position added: ', position);
     const mapPosition = new google.maps.LatLng(position.lat, position.lng);
@@ -117,15 +118,15 @@ export class TrackingPage {
     this.updateMap(this.locations);
   }
 
-  // Delete a location from Firebase
-  deleteLocation(position) {
+  // Delete a position and update the map
+  deleteLocation(position): void {
     const index = this.locations.find(item => item.timestamp === position.timestamp);
     this.locations.splice(index, 1);
     this.updateMap(this.locations);
   }
 
-  // Redraw all markers and the polylines on the map. Recalculate tourData params.
-  updateMap(locations) {
+  // Redraw all markers and the polylines on the map. Recalculate 'Tour Data' params.
+  updateMap(locations): void {
     // Remove all current marker
     this.markers.map((marker) => marker.setMap(null));
     this.markers = [];
@@ -209,6 +210,7 @@ export class TrackingPage {
     */
   }
 
+}
 
   /*
   setMarkerForAllLocations() {
@@ -227,4 +229,3 @@ export class TrackingPage {
     }
   }
   */
-}

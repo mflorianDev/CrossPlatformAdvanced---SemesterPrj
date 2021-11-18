@@ -1,10 +1,9 @@
-import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TourService } from '../core/services/tour.service';
 import { Tour } from '../core/tour';
+import { TrackingTour } from '../core/tracking-tour';
 
 @Component({
   selector: 'app-new-tour',
@@ -33,21 +32,21 @@ export class NewTourPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.route.snapshot.paramMap.get('trackingData')) {
-      const trackingData = JSON.parse(
-        this.route.snapshot.paramMap.get('trackingData')
+    if (this.route.snapshot.paramMap.get('trackingTour')) {
+      const trackingTour = JSON.parse(
+        this.route.snapshot.paramMap.get('trackingTour')
       );
-      this.loadTrackingData(trackingData);
+      this.loadTrackingTour(trackingTour);
     }
   }
 
-  loadTrackingData(trackingData: any): void {
-    this.startTime = new Date(trackingData.startTime).toISOString();
-    this.endTime = new Date(trackingData.endTime).toISOString();
-    this.distance = trackingData.distance;
-    this.altitudeUp = trackingData.altitudeUp;
-    this.altitudeDown = trackingData.altitudeDown;
-    this.positions = trackingData.positions;
+  loadTrackingTour(trackingTour: TrackingTour): void {
+    this.startTime = trackingTour.startTime;
+    this.endTime = trackingTour.endTime;
+    this.distance = trackingTour.distance;
+    this.altitudeUp = trackingTour.altitudeUp;
+    this.altitudeDown = trackingTour.altitudeDown;
+    this.positions = trackingTour.positions;
   }
 
   /**
@@ -77,7 +76,7 @@ export class NewTourPage implements OnInit {
     this.calculateDuration();
     this.setBatteryConsumption();
     // Create tour object with necessary properties for firestore
-    const tour: any = {
+    const tour: Tour = {
       name: this.name,
       date: this.date,
       duration: this.duration,
