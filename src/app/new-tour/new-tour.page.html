@@ -46,6 +46,10 @@
       <ion-label position="floating">Batterie Verbrauch <span class="label-description">[%]</span></ion-label>
       <p>{{ batteryConsumption }}</p>
     </ion-item>
+    <ion-item>
+      <ion-label position="floating">Getrackte Positionen<span class="label-description">[Anzahl]</span></ion-label>
+      <p>{{ positions.length }}</p>
+    </ion-item>
   </ion-list>
   <ion-button expand="full" (click)="saveTour()">Speichern</ion-button>
 </ion-content>

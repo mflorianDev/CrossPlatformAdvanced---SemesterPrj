@@ -21,7 +21,12 @@ export class AuthenticationService {
   constructor(private afs: Firestore) {
     this.auth = getAuth();
     onAuthStateChanged(this.auth, (user) => {
-      console.log('User Changed: ', user.email);
+      if (user) {
+        console.log('User Changed: ', user.email);
+        this.userDocRef = doc(this.afs, `users`, user.uid);
+      } else {
+        console.log('User Changed: no user signed in');
+      }
     });
   }
 
@@ -39,8 +44,9 @@ export class AuthenticationService {
     });
   }
 
-  signIn({ email, password }): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  async signIn({ email, password }): Promise<void> {
+    const credential = await signInWithEmailAndPassword(this.auth, email, password);
+    this.userDocRef = doc(this.afs, `users`, credential.user.uid);
   }
 
   signOut(): Promise<void> {

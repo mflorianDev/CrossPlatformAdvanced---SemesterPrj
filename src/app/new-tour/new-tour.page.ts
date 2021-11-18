@@ -23,6 +23,7 @@ export class NewTourPage implements OnInit {
   batteryStart: number;
   batteryEnd: number;
   batteryConsumption: number;
+  positions: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,7 @@ export class NewTourPage implements OnInit {
     this.distance = trackingData.distance;
     this.altitudeUp = trackingData.altitudeUp;
     this.altitudeDown = trackingData.altitudeDown;
+    this.positions = trackingData.positions;
   }
 
   /**
@@ -83,6 +85,7 @@ export class NewTourPage implements OnInit {
       altitudeUp: this.altitudeUp,
       altitudeDown: this.altitudeDown,
       batteryConsumption: this.batteryConsumption,
+      positions: this.positions,
     };
     // Save tour on firestore
     this.tourService.addTour(tour).then(

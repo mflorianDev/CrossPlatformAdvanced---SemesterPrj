@@ -23,16 +23,12 @@ import { TOURS } from '../mock-tours';
   providedIn: 'root',
 })
 export class TourService {
-  private currentUser: User = null;
   private tours: Observable<Tour[]>;
   private tourColRef: CollectionReference<DocumentData>;
 
   constructor(
-    private afs: Firestore,
     private authService: AuthenticationService
   ) {
-    // Get current user from AuthenticationService
-    this.currentUser = this.authService.getCurrentUser();
     // Get tour collection reference for current user (userDocRef from AuthenticationService)
     this.tourColRef = collection(this.authService.getUserDocRef(), `/tours`);
     // Load mock-tours if collection is empty

@@ -5,11 +5,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div #map id="map" [hidden]="!currentUser"></div>
-  <div *ngIf="currentUser">
-    <ion-item>
-      <ion-label>User ID: {{ currentUser.uid }}</ion-label>
-    </ion-item>
+  <div #map id="map"></div>
+  <div >
 
     <ion-button expand="block" (click)="startTracking()" *ngIf="!isTracking">
       <ion-icon name="locate" slot="start"></ion-icon>

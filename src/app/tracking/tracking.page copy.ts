@@ -2,10 +2,27 @@
 
 import {
   Component,
+  OnInit,
   ElementRef,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
+import { User } from '@angular/fire/auth';
+import {
+  Firestore,
+  collection,
+  CollectionReference,
+  onSnapshot,
+  query,
+  Unsubscribe,
+  doc,
+  addDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
+import { DocumentData } from 'rxfire/firestore/interfaces';
+import { orderBy } from '@firebase/firestore';
+import { AuthenticationService } from '../core/services/authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +30,7 @@ import { Router } from '@angular/router';
   templateUrl: './tracking.page.html',
   styleUrls: ['./tracking.page.scss'],
 })
-export class TrackingPage {
+export class TrackingPage implements OnInit, OnDestroy {
   // Map related
   @ViewChild('map') mapElement: ElementRef;
   map: any;
@@ -22,10 +39,15 @@ export class TrackingPage {
   oldLat: number;
   oldLong: number;
 
+  // Firebase Data
+  locations: any[];
+  locationsCollection: CollectionReference<DocumentData>;
+
   // Misc
   isTracking = false;
   watchID: string;
-  locations: any[];
+  currentUser: User;
+  unsubscribe: Unsubscribe;
 
   // Tour Data
   startTime: number;
@@ -36,17 +58,45 @@ export class TrackingPage {
 
   constructor(
     private router: Router,
+    private afs: Firestore,
+    private authService: AuthenticationService
   ) {
     this.init();
   }
+
+  ngOnInit(): void {}
 
   ionViewWillEnter() {
     this.loadMap();
   }
 
-  // Initialize settings
-  init() {
-    this.locations = [];
+  ngOnDestroy(): void {
+    this.unsubscribe();
+  }
+
+  // Perform an anonymous login and load data
+  async init() {
+    // Get current user
+    this.currentUser = this.authService.getCurrentUser();
+    // Get collection reference
+    this.locationsCollection = collection(
+      this.afs,
+      `users/${this.currentUser.uid}/locations`
+    );
+    console.log('locationsCollection: ', this.locationsCollection);
+    // Initialize snapshot listener for collection
+    const q = query(this.locationsCollection, orderBy('timestamp'));
+    this.unsubscribe = onSnapshot(q, (querySnapshot) => {
+      this.locations = [];
+      querySnapshot.forEach((document) => {
+        const id = document.id;
+        const data = document.data();
+        this.locations.push({ id, ...data });
+      });
+      // Update Map marker on every change
+      console.log('locations: ', this.locations);
+      this.updateMap(this.locations);
+    });
   }
 
   // Initialize a blank map
@@ -74,13 +124,12 @@ export class TrackingPage {
         const newLong = position.coords.longitude;
         // watchPosition often fires twice, therefore check if position is a new position
         if (this.oldLat !== newLat && this.oldLong !== newLong) {
-          const positionData = {
-            lat: newLat,
-            lng: newLong,
-            alt: position.coords.altitude,
-            timestamp: position.timestamp
-          };
-          this.addNewLocation(positionData);
+          this.addNewLocation(
+            newLat,
+            newLong,
+            position.coords.altitude,
+            position.timestamp
+          );
           this.oldLat = newLat;
           this.oldLong = newLong;
         }
@@ -99,7 +148,6 @@ export class TrackingPage {
       distance: this.distance / 1000,
       altitudeUp: this.altitudeUp,
       altitudeDown: this.altitudeDown,
-      positions: this.locations,
     };
     this.router.navigate([
       '/new-tour',
@@ -108,23 +156,26 @@ export class TrackingPage {
   }
 
   // Save a new location to Firebase and center the map
-  addNewLocation(position) {
-    this.locations.push(position);
-    console.log('Position added: ', position);
-    const mapPosition = new google.maps.LatLng(position.lat, position.lng);
-    this.map.setCenter(mapPosition);
+  async addNewLocation(lat, lng, alt, timestamp) {
+    const docRef = await addDoc(this.locationsCollection, {
+      lat,
+      lng,
+      alt,
+      timestamp,
+    });
+    console.log('Document written with ID: ', docRef.id);
+
+    const position = new google.maps.LatLng(lat, lng);
+    this.map.setCenter(position);
     this.map.setZoom(17);
-    this.updateMap(this.locations);
   }
 
   // Delete a location from Firebase
-  deleteLocation(position) {
-    const index = this.locations.find(item => item.timestamp === position.timestamp);
-    this.locations.splice(index, 1);
-    this.updateMap(this.locations);
+  async deleteLocation(pos) {
+    await deleteDoc(doc(this.locationsCollection, pos.id));
   }
 
-  // Redraw all markers and the polylines on the map. Recalculate tourData params.
+  // Redraw all markers and the polylines on the map
   updateMap(locations) {
     // Remove all current marker
     this.markers.map((marker) => marker.setMap(null));
@@ -170,7 +221,13 @@ export class TrackingPage {
     } else {
       this.endTime = null;
     }
-    // Calculate path distance, altitudeUp, altitudeDown
+    // Calculate path distance
+    /*
+    const pos1 = this.markers[0].getPosition() as google.maps.LatLng;
+    const pos2 = this.markers[1].getPosition() as google.maps.LatLng;
+    const dist = google.maps.geometry.spherical.computeDistanceBetween(pos1, pos2);
+    console.log('MarkerDistance: ', dist);
+    */
     this.distance = 0;
     this.altitudeUp = 0;
     this.altitudeDown = 0;
@@ -208,7 +265,6 @@ export class TrackingPage {
     console.log(`downhill:  ${this.altitudeDown.toFixed(2)} meters`);
     */
   }
-
 
   /*
   setMarkerForAllLocations() {
