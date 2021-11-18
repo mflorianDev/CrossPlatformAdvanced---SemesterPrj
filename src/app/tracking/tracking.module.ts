@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { TrackingPageRoutingModule } from './tracking-routing.module';
 
 import { TrackingPage } from './tracking.page';
+import { MenuModule } from '../core/shared/menu/menu.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TrackingPageRoutingModule
+    TrackingPageRoutingModule,
+    MenuModule
   ],
   declarations: [TrackingPage]
 })

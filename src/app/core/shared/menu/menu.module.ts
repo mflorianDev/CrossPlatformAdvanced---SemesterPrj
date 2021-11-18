@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { HomePage } from './home.page';
-import { HomePageRoutingModule } from './home-routing.module';
-import { MenuModule } from '../core/shared/menu/menu.module';
+import { MenuComponent } from './menu.component';
 
 
 @NgModule({
@@ -12,11 +10,12 @@ import { MenuModule } from '../core/shared/menu/menu.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule,
-    MenuModule
   ],
   declarations: [
-    HomePage,
+    MenuComponent
+  ],
+  exports: [
+    MenuComponent
   ]
 })
-export class HomePageModule {}
+export class MenuModule {}
