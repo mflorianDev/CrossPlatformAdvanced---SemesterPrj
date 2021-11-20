@@ -9,6 +9,9 @@ import { Geolocation } from '@capacitor/geolocation';
 import { Router } from '@angular/router';
 import { TrackingTour } from '../core/tracking-tour';
 
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+//declare let cordova: any;
+
 @Component({
   selector: 'app-tracking',
   templateUrl: './tracking.page.html',
@@ -37,6 +40,7 @@ export class TrackingPage {
 
   constructor(
     private router: Router,
+    private backgroundMode: BackgroundMode,
   ) {
     this.init();
   }
@@ -67,6 +71,8 @@ export class TrackingPage {
 
   // Start geolocation tracking with Capacitor geolocation plugin
   async startTracking(): Promise<void> {
+    // Enable backgroundMode from Cordova-plugin
+    this.backgroundMode.enable();
     this.isTracking = true;
     this.watchID = await Geolocation.watchPosition(
       { enableHighAccuracy: true },
@@ -91,6 +97,8 @@ export class TrackingPage {
 
   // Unsubscribe from the geolocation watch using the initial ID
   stopTracking(): void {
+    // Disable backgroundMode from Cordova-plugin
+    this.backgroundMode.disable();
     Geolocation.clearWatch({ id: this.watchID }).then(() => {
       this.isTracking = false;
     });

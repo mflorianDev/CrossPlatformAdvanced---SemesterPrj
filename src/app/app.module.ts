@@ -12,6 +12,9 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -25,6 +28,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    BackgroundMode,
   ],
   bootstrap: [AppComponent],
 })
