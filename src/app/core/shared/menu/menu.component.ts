@@ -18,7 +18,7 @@ export class MenuComponent implements OnInit {
   }
 
   goHome(){
-    this.router.navigateByUrl('home');
+    this.router.navigateByUrl('overview-tours');
   }
 
   goTracking(){

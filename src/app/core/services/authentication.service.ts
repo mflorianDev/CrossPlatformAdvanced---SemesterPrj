@@ -9,7 +9,15 @@ import {
   User,
   UserCredential,
 } from '@angular/fire/auth';
-import { DocumentReference, collection, CollectionReference, doc, DocumentData, Firestore, setDoc } from '@angular/fire/firestore';
+import {
+  DocumentReference,
+  collection,
+  CollectionReference,
+  doc,
+  DocumentData,
+  Firestore,
+  setDoc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -19,14 +27,25 @@ export class AuthenticationService {
   private userDocRef: DocumentReference;
 
   constructor(private afs: Firestore) {
-    this.auth = getAuth();
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        console.log('User Changed: ', user.email);
-        this.userDocRef = doc(this.afs, `users`, user.uid);
-      } else {
-        console.log('User Changed: no user signed in');
-      }
+  }
+
+  init(): Promise<void> {
+    return new Promise<void>(async (res) => {
+      //TODO: delete next line
+      console.log('AuthenticationService initializing ...');
+      this.auth = getAuth();
+      onAuthStateChanged(this.auth, await ((user) => {
+        if (user) {
+          console.log('User Changed: ', user.email);
+          this.userDocRef = doc(this.afs, `users`, user.uid);
+          //await new Promise<void>( ( res, rej) =>  res());
+        } else {
+          console.log('User Changed: no user signed in');
+        }
+      }));
+      //TODO: delete next line
+      console.log('AuthenticationService ready');
+      res();
     });
   }
 
@@ -45,7 +64,11 @@ export class AuthenticationService {
   }
 
   async signIn({ email, password }): Promise<void> {
-    const credential = await signInWithEmailAndPassword(this.auth, email, password);
+    const credential = await signInWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    );
     this.userDocRef = doc(this.afs, `users`, credential.user.uid);
   }
 

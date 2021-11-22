@@ -4,10 +4,10 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
 
 // Send unauthorized users to login
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/login']);
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 // Automatically log in users
-const redirectLoggedInToHome = () => redirectLoggedInTo(['/home']);
+const redirectLoggedInToHome = () => redirectLoggedInTo(['overview-tours']);
 
 const routes: Routes = [
   {
@@ -19,11 +19,6 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
     ...canActivate(redirectLoggedInToHome),
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
-    ...canActivate(redirectUnauthorizedToLogin),
   },
   {
     path: 'new-tour',
