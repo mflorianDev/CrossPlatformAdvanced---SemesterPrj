@@ -24,9 +24,14 @@ export class TourService {
   private tours: Observable<Tour[]>;
   private tourColRef: CollectionReference<DocumentData>;
 
-  constructor(
-    private authService: AuthenticationService
-  ) {
+  constructor( private authService: AuthenticationService ) {
+    this.init();
+  }
+
+  init(){
+    //TODO: delete next line
+    console.log('TourService initializing ...');
+    console.log(this.authService.getUserDocRef());
     // Get tour collection reference for current user (userDocRef from AuthenticationService)
     this.tourColRef = collection(this.authService.getUserDocRef(), `/tours`);
     // Load mock-tours if collection is empty
@@ -42,6 +47,8 @@ export class TourService {
     );
     // Load tours for current user from Firestore
     this.tours = collectionData(this.tourColRef, { idField: 'id' }) as Observable<Tour[]>;
+    //TODO: delete next line
+    console.log('TourService ready');
   }
 
   getAllTours(): Observable<Tour[]> {

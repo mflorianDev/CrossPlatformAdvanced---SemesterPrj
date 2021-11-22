@@ -12,6 +12,7 @@ import { Tour } from '../core/tour';
   styleUrls: ['./details-tour.page.scss'],
 })
 export class DetailsTourPage implements OnInit, OnDestroy {
+  // TODO: Attribute 'positions' implementieren
   tour: Tour = {
     id: null,
     name: null,

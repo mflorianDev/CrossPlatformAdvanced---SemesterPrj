@@ -36,7 +36,7 @@ export class LoginPage implements OnInit {
       .then(
         (user) => {
           loading.dismiss();
-          this.router.navigateByUrl('/home', { replaceUrl: true });
+          this.router.navigateByUrl('/overview-tours', { replaceUrl: true });
         },
         async (err) => {
           loading.dismiss();
@@ -58,7 +58,7 @@ export class LoginPage implements OnInit {
       .then(
         (res) => {
           loading.dismiss();
-          this.router.navigateByUrl('/home', { replaceUrl: true });
+          this.router.navigateByUrl('/overview-tours', { replaceUrl: true });
         },
         async (err) => {
           loading.dismiss();
