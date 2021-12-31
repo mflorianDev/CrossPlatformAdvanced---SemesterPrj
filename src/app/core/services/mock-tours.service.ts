@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TOURS } from '../mock-tours';
+import { MOCKTOURS } from '../mock-tours';
 import { Tour } from '../tour';
 
 @Injectable({
@@ -52,7 +52,7 @@ export class MockToursService {
   }
 
   private getMockTours(): void {
-    this.tours = TOURS;
+    this.tours = MOCKTOURS;
   }
 
   /**

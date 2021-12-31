@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
 
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { AuthenticationService } from './core/services/authentication.service';
@@ -37,6 +38,7 @@ export function initAuth(authService: AuthenticationService) {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    provideRemoteConfig(() => getRemoteConfig()),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

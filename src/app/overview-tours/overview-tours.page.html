@@ -14,8 +14,9 @@
         <p>Dauer: {{ tour.duration | date: 'HH:mm:ss' : 'GMT' }}</p> <!--GMT necessary to prevent time offset-->
         <p>Distanz: {{ tour.distance | number: '1.2-2' }} km</p>
         <p>Bergauf: {{ tour.altitudeUp }} m</p>
-        <p>Bergauf: {{ tour.altitudeDown }} m</p>
+        <p>Bergab: {{ tour.altitudeDown }} m</p>
         <p>Batterie: {{ tour.batteryConsumption }} %</p>
+        <p>Positionen: {{ tour.positions }} </p>
       </ion-label>
     </ion-item>
   </ion-list>
