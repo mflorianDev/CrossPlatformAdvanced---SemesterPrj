@@ -7,7 +7,7 @@
     <ion-button (click)="goHome()">
       <ion-title size="small">Home</ion-title>
     </ion-button>
-    <ion-button (click)="goTracking()">
+    <ion-button *ngIf="trackingEnabled" (click)="goTracking()">
       <ion-title size="small">Tracking</ion-title>
     </ion-button>
     <ion-button fill="clear" (click)="signOut()">
