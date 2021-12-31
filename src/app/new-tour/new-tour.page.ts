@@ -82,10 +82,10 @@ export class NewTourPage implements OnInit {
       date: this.date,
       duration: this.duration,
       distance: this.distance,
-      altitudeUp: this.altitudeUp,
-      altitudeDown: this.altitudeDown,
+      altitudeUp: this.altitudeUp ?? null,
+      altitudeDown: this.altitudeDown ?? null,
       batteryConsumption: this.batteryConsumption,
-      positions: this.positions,
+      positions: this.positions ?? null,
     };
     // Save tour on firestore
     this.tourService.addTour(tour).then(
