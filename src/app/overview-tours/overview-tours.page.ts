@@ -19,6 +19,7 @@ export class OverviewToursPage implements OnInit {
 
   getTours(): void {
     this.tours = this.tourService.getAllTours();
+    console.log('All Tours Loaded');
   }
 
 }

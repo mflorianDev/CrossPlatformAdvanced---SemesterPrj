@@ -67,10 +67,12 @@ export class TrackingPage {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    console.log('Google Maps New Map Loaded');
   }
 
   // Start geolocation tracking with Capacitor geolocation plugin
   async startTracking(): Promise<void> {
+    console.log('Tracking Initialized');
     // Enable backgroundMode from Cordova-plugin
     this.backgroundMode.enable();
     this.isTracking = true;
@@ -102,6 +104,7 @@ export class TrackingPage {
     Geolocation.clearWatch({ id: this.watchID }).then(() => {
       this.isTracking = false;
     });
+    console.log('Tracking Stopped');
     const trackingTour: TrackingTour = {
       startTime: new Date(this.startTime).toISOString(),
       endTime: new Date(this.endTime).toISOString(),
@@ -119,7 +122,7 @@ export class TrackingPage {
   // Add a new position and update the map
   addNewLocation(position): void {
     this.locations.push(position);
-    console.log('Position added: ', position);
+    console.log('Position Added: ', position);
     const mapPosition = new google.maps.LatLng(position.lat, position.lng);
     this.map.setCenter(mapPosition);
     this.map.setZoom(17);
@@ -138,7 +141,7 @@ export class TrackingPage {
     // Remove all current marker
     this.markers.map((marker) => marker.setMap(null));
     this.markers = [];
-    // Add marker for current position to the
+    // Add marker for current position
     if (locations.length !== 0) {
       const latLng = new google.maps.LatLng(
         locations.at(-1).lat,
@@ -208,6 +211,7 @@ export class TrackingPage {
           }
         }
       }
+      console.log('Map Updated');
     }
     /*
     console.log(`startTime:  ${this.startTime} timestamp`);

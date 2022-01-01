@@ -91,9 +91,11 @@ export class NewTourPage implements OnInit {
     this.tourService.addTour(tour).then(
       () => {
         this.showToast('Tour gespeichert');
+        console.log('New Tour Saved');
         this.router.navigateByUrl('/overview-tours');
       },
       (err) => {
+        console.log('ERROR: New Tour Could Not Be Saved');
         this.showToast(
           'Ein Fehler ist aufgetreten. Tour konnte nicht gespeichert werden! :('
         );
@@ -116,6 +118,7 @@ export class NewTourPage implements OnInit {
     this.batteryConsumption = undefined;
     this.positions = undefined;
     this.showToast('Tour gelöscht');
+    console.log('New Tour Parameters Discarded');
   }
 
   showToast(msg) {

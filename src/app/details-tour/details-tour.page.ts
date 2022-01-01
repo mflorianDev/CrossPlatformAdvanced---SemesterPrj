@@ -55,23 +55,28 @@ export class DetailsTourPage implements OnInit, OnDestroy {
     this.tourService.deleteTour(id).then(
       () => {
         this.showToast('Tour gelöscht');
+        console.log('Tour Deleted, ID: ', id);
         this.router.navigateByUrl('/overview-tours');
       },
       (err) => {
+        console.log('ERROR: Tour Could Not Be Deleted');
         this.showToast('Ein Fehler ist aufgetreten. Tour konnte nicht gelöscht werden! :(');
       }
     );
   }
 
   updateTour(): void {
+    const id = this.tour.id;
     // convert tour.duration from ISO 8601 datetime format to milliseconds
     this.tour.duration = new Date(this.duration).getTime();
     this.tourService.updateTour(this.tour).then(
       () => {
         this.showToast('Tour geändert');
+        console.log('Tour Changes Saved, ID: ', id);
         this.router.navigateByUrl('/overview-tours');
       },
       (err) => {
+        console.log('ERROR: Tour Changes Could Not Be Saved');
         this.showToast('Ein Fehler ist aufgetreten. Tour konnte nicht geändert werden! :(');
       }
     );
