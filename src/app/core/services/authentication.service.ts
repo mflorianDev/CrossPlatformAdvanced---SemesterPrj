@@ -7,14 +7,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
-  UserCredential,
 } from '@angular/fire/auth';
 import {
   DocumentReference,
-  collection,
-  CollectionReference,
   doc,
-  DocumentData,
   Firestore,
   setDoc,
 } from '@angular/fire/firestore';
@@ -31,19 +27,16 @@ export class AuthenticationService {
 
   init(): Promise<void> {
     return new Promise<void>(async (res) => {
-      //TODO: delete next line
       console.log('AuthenticationService initializing ...');
       this.auth = getAuth();
       onAuthStateChanged(this.auth, await ((user) => {
         if (user) {
           console.log('User Changed: ', user.email);
           this.userDocRef = doc(this.afs, `users`, user.uid);
-          //await new Promise<void>( ( res, rej) =>  res());
         } else {
           console.log('User Changed: no user signed in');
         }
       }));
-      //TODO: delete next line
       console.log('AuthenticationService ready');
       res();
     });
@@ -55,7 +48,7 @@ export class AuthenticationService {
       email,
       password
     );
-    // Speichere user in einer firebase-collection
+    // save user in collection on firestore
     this.userDocRef = doc(this.afs, `users`, credential.user.uid);
     return setDoc(this.userDocRef, {
       uid: credential.user.uid,

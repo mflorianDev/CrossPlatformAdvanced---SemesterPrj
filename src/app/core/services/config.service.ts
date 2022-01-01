@@ -1,20 +1,13 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { RemoteConfig, fetchAndActivate, getAll, Value } from '@angular/fire/remote-config';
-import { Observable, Subscription } from 'rxjs';
-import { AllParameters } from 'rxfire/remote-config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigService implements OnDestroy {
+export class ConfigService {
   private config: Record<string, Value>;
-  private configObservable: Observable<AllParameters>;
-  private configSubscribtion: Subscription;
 
   constructor(private remoteConfig: RemoteConfig) { }
-
-  ngOnDestroy(): void {
-  }
 
   // return fetched config values
   async getConfig(): Promise<Record<string, Value>> {
@@ -29,20 +22,4 @@ export class ConfigService implements OnDestroy {
     this.config = getAll(this.remoteConfig);
   }
 
-  /*
-  // Load all configuration values from RemoteConfig and subscribe
-  private async fetchRemoteConfig(): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      fetchAndActivate(this.remoteConfig).then(() => {
-        this.configSubscribtion = getAll(this.remoteConfig).subscribe(
-          (params) => {
-            this.config = params;
-            console.log('params: ', params);
-            resolve(true);
-          }
-        );
-      });
-    });
-  }
-  */
 }
