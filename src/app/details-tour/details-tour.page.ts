@@ -49,7 +49,10 @@ export class DetailsTourPage implements OnInit, OnDestroy {
   }
 
   deleteTour(): void {
-    this.tourService.deleteTour(this.tour.id).then(
+    const id = this.tour.id;
+    // call unsubscribe otherwise ionic/angular lifecycle throws errors on updating template!
+    this.tourServiceSubscription.unsubscribe();
+    this.tourService.deleteTour(id).then(
       () => {
         this.showToast('Tour gelöscht');
         this.router.navigateByUrl('/overview-tours');

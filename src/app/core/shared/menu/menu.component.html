@@ -7,6 +7,7 @@
     <ion-button (click)="goHome()">
       <ion-title size="small">Home</ion-title>
     </ion-button>
+    <!--show tracking option only if tracking in remoteConfig is enabled-->
     <ion-button *ngIf="trackingEnabled" (click)="goTracking()">
       <ion-title size="small">Tracking</ion-title>
     </ion-button>

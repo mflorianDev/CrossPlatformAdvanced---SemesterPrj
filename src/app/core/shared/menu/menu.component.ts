@@ -17,6 +17,7 @@ export class MenuComponent implements OnInit {
     this.isTrackingEnabled();
   }
 
+  // load remoteConfig value for "trackingEnabled"
   async isTrackingEnabled() {
     this.trackingEnabled = await this.configService.getConfig().then((config) => config.trackingEnabled.asBoolean());
   }
