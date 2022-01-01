@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { DetailsTourPageRoutingModule } from './details-tour-routing.module';
 
 import { DetailsTourPage } from './details-tour.page';
+import { MenuModule } from '../core/shared/menu/menu.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DetailsTourPageRoutingModule
+    DetailsTourPageRoutingModule,
+    MenuModule
   ],
   declarations: [DetailsTourPage]
 })
